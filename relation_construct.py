@@ -45,14 +45,14 @@ def attr_auto_derive(LINE_DES):
         SUB_GRAPH.nodes.append( _attr_of_node_(OBJ_LIST[1]) );
         SUB_GRAPH.nodes.append( _attr_of_node_(OBJ_LIST[2]) );
         # give attr of edge:
-        SUB_GRAPH.edges.append( _attr_of_edge_(OBJ_LIST[0],link_nodes=SUB_GRAPH.nodes) );
+        SUB_GRAPH.edges.append( _attr_of_edge_(OBJ_LIST[0],link_nodes = [NODE.name for NODE in SUB_GRAPH.nodes]  ) );
     # relationship: 'mul': (include the situation: map multi-objects to one)
     if len(OBJ_LIST) >  3:
         # give attr of nodes:
         for NODE_OBJ in OBJ_LIST[1:-1]:
             SUB_GRAPH.nodes.append( _attr_of_node_(NODE_OBJ) );
         # give attr of edge:    
-        SUB_GRAPH.edges.append( _attr_of_edge_(OBJ_LIST[0],link_nodes=SUB_GRAPH.nodes) );         
+        SUB_GRAPH.edges.append( _attr_of_edge_(OBJ_LIST[0],link_nodes = [NODE.name for NODE in SUB_GRAPH.nodes]  ) );         
     return SUB_GRAPH;
 
 

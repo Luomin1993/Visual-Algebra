@@ -13,6 +13,7 @@ import networkx as nx;
 
 from relation_construct import *;
 
+"""
 # -------- main func: read file and give Graph --------------
 def read_file(FILE_PATH):
     # read the file;
@@ -42,6 +43,45 @@ def read_file(FILE_PATH):
             if INDEX_OF_OBJ<0:
                 # add the EDGE into the GRAPH:
                 GRAPH.edges.append(EDGE);
+        # ----- loop: combine each node into GRAPH;---------------------------
+        for NODE in SUB_GRAPH.nodes:
+            # if the NODE is in the GRAPH:
+            INDEX_OF_OBJ = _in_graph_(NODE,GRAPH,JUDGE_ITEM='node')
+            if INDEX_OF_OBJ>=0:
+                # but this NODE has new attr;
+                NEW_ATTRS = _new_attrs_to_graph_(NODE,GRAPH,INDEX_OF_OBJ,JUDGE_ITEM='node');
+                if NEW_ATTRS>=0:
+                    # add the new attrs into the corresponding object;
+                    GRAPH.nodes[INDEX_OF_OBJ] += NEW_ATTRS;
+                # nothing to do: next line
+                if NEW_ATTRS<0:
+                    continue;        
+            # if the NODE is not in the GRAPH:
+            if INDEX_OF_OBJ<0:
+                # add the NODE into the GRAPH:
+                GRAPH.nodes.append(NODE);        
+    # return the result;        
+    return GRAPH;        
+"""
+
+# -------- main func: read file and give Graph --------------
+# LOG: 2019-10-31 19:30
+#      I delete the anti-edge-repeat mechanism;
+def read_file(FILE_PATH):
+    # read the file;
+    with open(FILE_PATH, 'r') as f:
+        DES_LINES = f.read().split('\n')[0:-1];
+    # init the GRAPH;
+    GRAPH     = Graph(FILE_PATH.replace('.des',''), edges=[], nodes=[]);
+    # loop: resolve each line of the *.des;
+    for LINE_DES in DES_LINES:
+        # get the sub-graph of this line;
+        SUB_GRAPH = attr_auto_derive(LINE_DES);
+        # combine the sub-graph into the GRAPH;
+        # ----- loop: combine each edge into GRAPH;---------------------------
+        for EDGE in SUB_GRAPH.edges:
+            # add the EDGE into the GRAPH:
+            GRAPH.edges.append(EDGE);
         # ----- loop: combine each node into GRAPH;---------------------------
         for NODE in SUB_GRAPH.nodes:
             # if the NODE is in the GRAPH:
@@ -107,6 +147,7 @@ def print_graph(GRAPH):
     for EDGE in GRAPH.edges:
         print EDGE.name;
         print EDGE.attr;
+        print EDGE.link_nodes;
 
 
 # ----------- T E S T ---------------

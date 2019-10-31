@@ -6,8 +6,8 @@
 __author__ = 'hanss401'
 
 # Constant: define the distance equals same_pos:
-SAME_DIS = 0.3;
-MOVE_DIS = 0.5;
+SAME_DIS = 0.18;
+MOVE_DIS = 0.1;
 
 
 import numpy as np;
@@ -80,8 +80,8 @@ def plot_out(GRAPH,SAVE_PATH):
             MAP_NODES.append(NODE.name);   
     # add two-obj edges into the NXG;
     for EDGE in GRAPH.edges:
-        if len(EDGE.nodes) == 2:
-            NXG.add_edge( EDGE.nodes[0], EDGE.nodes[1]);
+        if len(EDGE.link_nodes) == 2:
+            NXG.add_edge( EDGE.link_nodes[0], EDGE.link_nodes[1]);
     # layout the nodes(within two-obj edges);
     POSITIONS = nx.spring_layout(NXG);
     # draw nodes:
@@ -103,6 +103,8 @@ def plot_out(GRAPH,SAVE_PATH):
                                  node_size = 1000,
                                  node_color = 'b',
                                  node_shape = 'o');
+    # write labels on nodes;
+    nx.draw_networkx_labels(NXG, POSITIONS, font_size=14, font_family='sans-serif');    
     # draw edges with 2-nodes:
     nx.draw_networkx_edges(NXG, POSITIONS, 
                               style = 'dashed', 
@@ -145,7 +147,7 @@ def plot_out(GRAPH,SAVE_PATH):
                 # move to the nearest pos:
                 LABEL_POS[1] -= MOVE_DIS;
             # write the text;    
-            plt.text(LABEL_POS[0],LABEL_POS[1],EDGE.name,fontsize=font_size);   
+            plt.text(LABEL_POS[0],LABEL_POS[1],EDGE.name,fontsize=11);   
             # record the position occupied:
             OCCUPIED_POSITIONS.append(LABEL_POS);
         # for 'mul'-type edge:
@@ -158,7 +160,7 @@ def plot_out(GRAPH,SAVE_PATH):
                 # move to the nearest pos:
                 LABEL_POS[1] -= MOVE_DIS;
             # write the text;    
-            plt.text(LABEL_POS[0],LABEL_POS[1],EDGE.name,fontsize=font_size);   
+            plt.text(LABEL_POS[0],LABEL_POS[1],EDGE.name,fontsize=11);   
             # record the position occupied:
             OCCUPIED_POSITIONS.append(LABEL_POS);
         # for 'map'-type edge:
@@ -171,7 +173,7 @@ def plot_out(GRAPH,SAVE_PATH):
                 # move to the nearest pos:
                 LABEL_POS[1] -= MOVE_DIS;
             # write the text;    
-            plt.text(LABEL_POS[0],LABEL_POS[1],EDGE.name,fontsize=font_size);   
+            plt.text(LABEL_POS[0],LABEL_POS[1],EDGE.name,fontsize=11);   
             # record the position occupied:
             OCCUPIED_POSITIONS.append(LABEL_POS);
         
@@ -190,7 +192,7 @@ def _get_nodes_positions_(EDGE,POSITIONS):
 
 # --------- sub-func:compute average position ----------
 def _compute_ave_pos_(LINKED_POSITIONS):
-    AVE_POSITION = (0.0,0.0);
+    AVE_POSITION = [0.0,0.0];
     for POSITION in LINKED_POSITIONS:
         AVE_POSITION[0] += POSITION[0];
         AVE_POSITION[1] += POSITION[1];
@@ -204,6 +206,13 @@ def _same_pos_(POSITION_A,POSITION_B):
     if DISTANCE < SAME_DIS:
         return True;
     return False;    
+
+# --------- sub-func:the position has been occupied ----------
+def _is_occupied_(LABEL_POS,OCCUPIED_POSITIONS):
+    for POSITION in OCCUPIED_POSITIONS:
+        if _same_pos_(POSITION,LABEL_POS):
+            return True;
+    return False;        
 
 # --------- draw the edges set -----------
 def draw_edges(PLOTTER):
