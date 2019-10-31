@@ -95,12 +95,18 @@ def _attr_of_node_(STRING_NODE):
 
 
 # ------------ complete the relations --------------
-def attr_auto_complete(LINE_DES,GRAPH):
-    pass;     
+def attr_auto_complete(MANI_GRAPH,MAIN_GRAPH):
+    # compare the nodes between two GRAPHs;
+    pass;
 
+# ------------ sub-func:compare two nodes ----------
+def _compare_two_nodes_(MANI_NODE,MAIN_NODE,MANI_GRAPH,MAIN_GRAPH):
+    pass;
 
-
-
+# ------------ sub-func:find the linked nodes of one node ----------
+#  return a list:[ (EDGE_LINKED,NODES_LINKED) ] where NODES_LINKED is also a list;
+def _find_linked_nodes(NODE,GRAPH):
+	pass;
 
 class Edge(object):
         """the basic class of Edge
