@@ -11,12 +11,10 @@ import re;
 import matplotlib.pyplot as plt;
 import networkx as nx;
 
-from load_file import *;
-
 class Relationship(object):
-    	"""the basic class of Relationship
+        """the basic class of Relationship
 
-    	Parameters
+        Parameters
         ----------
         name : string
             the name of the Relationship;
@@ -28,18 +26,18 @@ class Relationship(object):
         patten: re
             i.e.:r'*;*;*';
 
-    	"""
-    	def __init__(self, name, attr=None, patten):
-    		super(Relationship, self).__init__();
-    		self.name   =   name;
-    		self.attr   =   atrt;
-    		self.patten = patten;
+        """
+        def __init__(self, name, attr, patten):
+            super(Relationship, self).__init__();
+            self.name   =   name;
+            self.attr   =   attr;
+            self.patten = patten;
 
 # ------------ derive the relations --------------
 def attr_auto_derive(LINE_DES):
-	# init the sub-graph;
-	SUB_GRAPH = Graph(name='sub-graph',edges=[],nodes=[]);
-	# trans the STRING into LIST;
+    # init the sub-graph;
+    SUB_GRAPH = Graph(name='sub-graph',edges=[],nodes=[]);
+    # trans the STRING into LIST;
     OBJ_LIST = LINE_DES.split(';');
     # relationship: 'two':
     if len(OBJ_LIST) == 3:      
@@ -84,7 +82,7 @@ def _attr_of_edge_(STRING_EDGE,link_nodes=[]):
 #              then return the node;
 def _attr_of_node_(STRING_NODE):
     # init the NODE:
-    NODE = Edge(STRING_NODE,[]);
+    NODE = Node(STRING_NODE,[]);
     # give the attr:
     if STRING_NODE[0]=='$' and STRING_NODE[-1]=='$':
         NODE.attr.append('var');
@@ -93,10 +91,91 @@ def _attr_of_node_(STRING_NODE):
     if '(\\cdot' in STRING_NODE:
         NODE.attr.append('map');        
     NODE.attr.append('normal');       
-    return EDGE;
+    return NODE;
 
 
 # ------------ complete the relations --------------
 def attr_auto_complete(LINE_DES,GRAPH):
-    pass;		
+    pass;     
 
+
+
+
+
+class Edge(object):
+        """the basic class of Edge
+
+        Parameters
+        ----------
+        name : string
+            the name of the Edge;
+    
+        attr : list of {string}
+            each of which is one of the attributes:
+               {'def','thm','eq','map'};
+
+        attr : list of {string}
+            linked nodes, i.e.:
+               {'$\phi$','S_a',...};       
+    
+        style: string, optional
+            the style of the edge drawed;
+
+        color: string, optional
+            the color of the edge drawed;    
+        """
+        def __init__(self, name, attr, style=None, color=None, link_nodes=[]):
+            super(Edge, self).__init__();
+            self.name       =       name;
+            self.attr       =       attr; 
+            self.style      =      style;
+            self.color      =      color;
+            self.link_nodes = link_nodes;
+
+            
+class Node(object):
+        """the basic class of Node
+
+        Parameters
+        ----------
+        name : string
+            the name of the Node;
+    
+        attr : list of {string}
+            each of which is one of the attributes:
+               {'var','prop','deb','link','map'};
+    
+        style: string, optional
+            the style of the node drawed;
+
+        color: string, optional
+            the color of the node drawed;    
+        """
+        def __init__(self, name, attr, style=None, color=None):
+            super(Node, self).__init__();
+            self.name  =  name;
+            self.attr  =  attr;
+            self.style = style;
+            self.color = color;
+            
+
+class Graph(object):
+        """the basic class of Graph
+
+        Parameters
+        ----------
+        name : string
+            the name of the Graph;
+
+        edges_set : list, {edges};
+            the name of the Graph;
+    
+        nodes_set : list, {nodes};
+            one of the attributes:
+        """
+        def __init__(self, name, edges=None, nodes=None):
+            super(Graph, self).__init__();
+            self.name  =  name;
+            self.edges = edges;
+            self.nodes = nodes;
+            
